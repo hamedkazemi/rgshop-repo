@@ -1,0 +1,557 @@
+entity Users {
+  id Long required
+  username String
+  email String
+  password String
+  role String
+  userType String
+  createdAt Instant
+  clientId String
+  clientSecret String
+  lastLogin Instant
+  status Status
+  defaultBillingAddressId Long
+  defaultShippingAddressId Long
+  metadata TextBlob
+  privateMetadata TextBlob
+  externalUserId String
+}
+enum Status {
+  ACTIVE, BAN
+}
+
+entity UserGroups {
+  id Long required
+  name String
+  permissions TextBlob
+}
+
+entity UserGroupMemberships {
+  userId Long required
+  groupId Long required
+}
+
+entity Vendors {
+  id Long required
+  userId Long
+  name String
+  description TextBlob
+}
+
+entity Categories {
+  id Long required
+  name String
+  slug String
+  description TextBlob
+  parentId Long
+  isHidden Boolean
+  lft Integer
+  rght Integer
+  treeId Integer
+}
+
+entity Products {
+  id Long required
+  name String
+  slug String
+  description TextBlob
+  price BigDecimal required
+  type String
+  weight BigDecimal
+  length BigDecimal
+  width BigDecimal
+  height BigDecimal
+  special Boolean
+  isHidden Boolean
+  isRefundable Boolean
+  hasVariants Boolean
+  trackInventory Boolean
+  seoTitle String
+  seoDescription TextBlob
+  seoKeywords String
+  createdAt Instant
+  categoryId Long
+}
+
+entity ProductImages {
+  id Long required
+  productId Long
+  url String
+  thumbnailUrl String
+  imageSortOrder Integer
+  isDefault Boolean
+}
+
+entity ProductVariants {
+  id Long required
+  productId Long
+  vendorId Long
+  name String
+  sku String
+  reserveTime Integer
+  sortOrder Integer
+  catalogPrice BigDecimal
+  price BigDecimal
+  hasImei Boolean
+  imei Boolean
+  trackInventory Boolean
+}
+
+entity Pricing {
+  id Long required
+  variantId Long
+  price BigDecimal
+  catalogPrice BigDecimal
+  totalPrice BigDecimal
+  startDate Instant
+  endDate Instant
+  active Boolean
+}
+
+entity PricingHistory {
+  id Long required
+  pricingId Long
+  variantId Long
+  catalogPrice BigDecimal
+  price BigDecimal
+  totalPrice BigDecimal
+  changedAt Instant
+}
+
+entity ProductOptions {
+  id Long required
+  productId Long
+  optionType String
+  name String
+  productAttributeId Long
+}
+
+entity ProductAttributes {
+  id Long required
+  name String
+  filterable Boolean
+  searchPosition Integer
+  valueRequired Boolean
+  isOption Boolean
+  isVisible Boolean
+  display String
+}
+
+entity ProductAttributeValues {
+  id Long required
+  productId Long
+  attributeId Long
+  value String
+}
+
+entity OptionValues {
+  id Long required
+  optionId Long
+  variantId Long
+  value String
+}
+
+entity Bundles {
+  id Long required
+  name String
+  discount BigDecimal
+}
+
+entity BundleItems {
+  id Long required
+  bundleId Long
+  productVariantId Long
+  quantity Integer
+}
+
+entity Carts {
+  id Long required
+  userId Long
+  createdAt Instant
+  expiresAt Instant
+}
+
+entity CartItems {
+  id Long required
+  cartId Long
+  variantId Long
+  quantity Integer
+}
+
+entity Carousels {
+  id Long required
+  name String
+  location String
+}
+
+entity CarouselItems {
+  id Long required
+  carouselId Long
+  image String
+  link String
+  order Integer
+}
+
+entity Orders {
+  id Long required
+  userId Long
+  status String
+  shippingMethod String
+  shippingStatus String
+  orderShippingId Long
+  orderBillingId Long
+  createdAt Instant
+  customerIpAddress String
+  bankRedirectUrl String
+  cartUsed Boolean
+  beforeDiscount BigDecimal
+  giftIdUsed Long
+  voucherUsed Long
+  totalPrice BigDecimal
+  totalPaid BigDecimal
+  paymentMethodType String
+}
+
+entity OrderItems {
+  id Long required
+  orderId Long
+  productVariantId Long
+  quantity Integer
+  isRefundable Boolean
+}
+
+entity OrderEvents {
+  id Long required
+  type String
+  datetime Instant
+  orderId Long
+  userId Long
+  parameters TextBlob
+}
+
+entity OrderFulfillments {
+  id Long required
+  orderId Long
+  trackingNumber String
+  metadata TextBlob
+  status String
+  datetime Instant
+}
+
+entity Invoices {
+  id Long required
+  orderId Long
+  status String
+  createdAt Instant
+}
+
+entity InvoiceEvents {
+  id Long required
+  invoiceId Long
+  type String
+  datetime Instant
+}
+
+entity Giftcards {
+  id Long required
+  createdAt Instant
+  startAt Instant
+  endAt Instant
+  title String
+  code String
+  lastUsedOn Instant
+  userId Long
+  isActive Boolean
+  isOnlyFirstTimeUse Boolean
+}
+
+entity GiftcardOrders {
+  id Long required
+  orderId Long
+  giftcardId Long
+}
+
+entity Discounts {
+  id Long required
+  name String
+  type DiscountType
+  value BigDecimal
+  startDate Instant
+  endDate Instant
+  active Boolean
+}
+enum DiscountType {
+  PERCENTAGE, FIXED_AMOUNT
+}
+
+entity DiscountCategories {
+  id Long required
+  discountId Long
+  categoryId Long
+}
+
+entity DiscountProducts {
+  id Long required
+  discountId Long
+  productId Long
+}
+
+entity DiscountUserGroups {
+  id Long required
+  discountId Long
+  userGroupId Long
+}
+
+entity Wallets {
+  id Long required
+  userId Long
+  balance BigDecimal
+  createdAt Instant
+  updatedAt Instant
+}
+
+entity Addresses {
+  id Long required
+  userId Long
+  firstName String
+  lastName String
+  companyName String
+  streetAddress1 String
+  streetAddress2 String
+  city String
+  postalCode String
+  country String
+  phone String
+  phone2 String
+  mobile String
+  isShipping Boolean
+  isBilling Boolean
+  createdAt Instant
+  updatedAt Instant
+}
+
+entity Refunds {
+  id Long required
+  orderItemId Long
+  amount BigDecimal
+  reason TextBlob
+  status String
+  processedAt Instant
+}
+
+entity CmsPages {
+  id Long required
+  title String
+  content TextBlob
+  jsonContent TextBlob
+  published Boolean
+  createdAt Instant
+}
+
+entity CmsChanges {
+  id Long required
+  pageId Long
+  changedAt Instant
+  previousContent TextBlob
+  newContent TextBlob
+}
+
+entity Menus {
+  id Long required
+  title String
+  position String
+}
+
+entity MenuItems {
+  id Long required
+  menuId Long
+  title String
+  url String
+  parentId Long
+  icon String
+  order Integer
+  isHidden Boolean
+}
+
+entity UserActivityLog {
+  id Long required
+  userId Long
+  activityType String
+  details TextBlob
+  timestamp Instant
+}
+
+entity Configurations {
+  id Long required
+  key String
+  value TextBlob
+}
+
+entity OtpRequests {
+  id Long required
+  userId Long
+  otpCode String
+  createdAt Instant
+  expiresAt Instant
+}
+
+entity PhoneNumbers {
+  id Long required
+  number String unique
+  status PhoneNumberStatus
+  reservedAt Instant
+  warehouseId Long
+}
+enum PhoneNumberStatus {
+  RESERVED, SOLD, AVAILABLE
+}
+
+entity Warehouses {
+  id Long required
+  location String
+  capacity Integer
+}
+
+entity Inventory {
+  id Long required
+  productVariantId Long
+  warehouseId Long
+  quantity Integer
+}
+
+entity Webhooks {
+  id Long required
+  url String
+  username String
+  password String
+  headerValue String
+  headerField String
+  onEvents TextBlob
+}
+
+entity Transactions {
+  id Long required
+  orderId Long
+  userId Long
+  paymentId Long
+  transactionType String
+  status TransactionStatus
+  amount BigDecimal
+  transactionDate Instant
+  currency String
+}
+enum TransactionStatus {
+  COMPELETED, PENDING, FAILED
+}
+
+entity Payments {
+  id Long required
+  userId Long
+  orderId Long
+  paymentMethod String
+  paymentMethodDetails TextBlob
+  amount BigDecimal
+  currency String
+  status PaymentStatus
+  paymentDate Instant
+  gateway String
+  gatewayPaymentId String
+}
+enum PaymentStatus {
+  COMPLETED, PENDING, FAILED
+}
+
+entity Fulfillment {
+  id Long required
+  orderItemId Long
+  vendorId Long
+  warehouseId Long
+  shipmentStatus String
+  trackingNumber String
+  shipmentDate Instant
+  estimatedDeliveryDate Instant
+  deliveryDate Instant
+  notes TextBlob
+}
+
+entity FulfillmentLines {
+  id Long required
+  fulfillmentId Long
+  productVariantId Long
+  quantity Integer
+}
+
+entity OrderFulfillmentActivities {
+  id Long required
+  orderId Long
+  fulfillmentType FulfillmentType
+  activity String
+  activityDate Instant
+  notes TextBlob
+}
+enum FulfillmentType {
+  PICKUP, DELIVERY, DIGITAL, DROP_SHIPPING
+}
+
+relationship ManyToOne {
+  UserGroupMemberships{userId} to Users
+  UserGroupMemberships{groupId} to UserGroups
+  Vendors{userId} to Users
+  Categories{parentId} to Categories
+  Products{categoryId} to Categories
+  ProductImages{productId} to Products
+  ProductVariants{productId} to Products
+  Pricing{variantId} to ProductVariants
+  PricingHistory{pricingId} to Pricing
+  ProductOptions{productAttributeId} to ProductAttributes
+  ProductAttributeValues{productId} to Products
+  ProductAttributeValues{attributeId} to ProductAttributes
+  OptionValues{optionId} to ProductOptions
+  OptionValues{variantId} to ProductVariants
+  BundleItems{bundleId} to Bundles
+  BundleItems{productVariantId} to ProductVariants
+  CartItems{cartId} to Carts
+  CartItems{variantId} to ProductVariants
+  CarouselItems{carouselId} to Carousels
+  OrderItems{orderId} to Orders
+  OrderItems{productVariantId} to ProductVariants
+  OrderEvents{orderId} to Orders
+  OrderEvents{userId} to Users
+  OrderFulfillments{orderId} to Orders
+  Invoices{orderId} to Orders
+  InvoiceEvents{invoiceId} to Invoices
+  GiftcardOrders{orderId} to Orders
+  GiftcardOrders{giftcardId} to Giftcards
+  DiscountCategories{discountId} to Discounts
+  DiscountCategories{categoryId} to Categories
+  DiscountProducts{discountId} to Discounts
+  DiscountProducts{productId} to Products
+  DiscountUserGroups{discountId} to Discounts
+  DiscountUserGroups{userGroupId} to UserGroups
+  Wallets{userId} to Users
+  Addresses{userId} to Users
+  Refunds{orderItemId} to OrderItems
+  CmsChanges{pageId} to CmsPages
+  MenuItems{menuId} to Menus
+  MenuItems{parentId} to MenuItems
+  UserActivityLog{userId} to Users
+  OtpRequests{userId} to Users
+  PhoneNumbers{warehouseId} to Warehouses
+  Inventory{productVariantId} to ProductVariants
+  Inventory{warehouseId} to Warehouses
+  FulfillmentLines{fulfillmentId} to Fulfillment
+  FulfillmentLines{productVariantId} to ProductVariants
+  OrderFulfillmentActivities{orderId} to Orders
+  Fulfillment{orderItemId} to OrderItems
+  Fulfillment{vendorId} to Vendors
+  Fulfillment{warehouseId} to Warehouses
+  Transactions{orderId} to Orders
+  Transactions{paymentId} to Payments
+  Payments{userId} to Users
+  Payments{orderId} to Orders
+}
+
+service all with serviceClass except UserActivityLog, Webhooks
+paginate all with pagination except UserActivityLog, Webhooks
+dto * with mapstruct
+search * with elasticsearch except UserActivityLog, Webhooks
